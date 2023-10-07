@@ -5,6 +5,7 @@
 using namespace llvm;
 
 #include "utils.hh"
+#include "config.hh"
 
 #include <set>
 #include <vector>
@@ -33,7 +34,7 @@ void getFilesInFolder(std::string folder, bool recursive, bool dir_prefix,
            i.increment(ec)) {
         std::string path = i->path();
         std::string filename(sys::path::filename(path));
-        if ((filename[0] == '.' && filename != ".ccls") ||
+        if ((filename[0] == '.' && filename != ccls::g_config->cache.dotCCLSFile) ||
             sys::fs::status(path, status, false))
           continue;
         if (sys::fs::is_symlink_file(status)) {

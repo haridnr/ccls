@@ -270,7 +270,7 @@ void loadDirectoryListing(ProjectProcessor &proc, const std::string &root,
                      if (lang.first != LanguageId::Unknown && !lang.second) {
                        if (!seen.count(path))
                          files.push_back(path);
-                     } else if (sys::path::filename(path) == ".ccls") {
+                     } else if (sys::path::filename(path) == g_config->cache.dotCCLSFile) {
                        std::vector<const char *> args =
                            readCompilerArgumentsFromFile(path);
                        folder.dot_ccls.emplace(
@@ -461,7 +461,7 @@ void Project::loadDirectory(const std::string &root, Project::Folder &folder) {
   // Use directory listing if .ccls exists or compile_commands.json does not
   // exist.
   path.clear();
-  sys::path::append(path, root, ".ccls");
+  sys::path::append(path, root, g_config->cache.dotCCLSFile);
   if (sys::fs::exists(path))
     loadDirectoryListing(proc, root, seen);
 }
@@ -548,7 +548,7 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect,
         // Find local .ccls file to get args
         auto cur = path;
         while (!(cur = sys::path::parent_path(cur)).empty()) {
-            auto ccls_path = cur + "/.ccls";
+            auto ccls_path = cur + "/" + g_config->cache.dotCCLSFile;
             if (sys::fs::exists(ccls_path)) {
                 LOG_S(INFO) << "Using nearest ccls file "<< ccls_path <<"\n";
                 auto& folder = root2folder[cur];
