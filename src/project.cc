@@ -542,6 +542,28 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect,
     // entry and append .ccls args.
     if (must_exist && !match && !(best_dot_ccls_args && !append))
       return ret;
+
+    bool usingLocalCCLSFile = false;
+    if (!best) {
+        // Find local .ccls file to get args
+        auto cur = path;
+        while (!(cur = sys::path::parent_path(cur)).empty()) {
+            auto ccls_path = cur + "/.ccls";
+            if (sys::fs::exists(ccls_path)) {
+                LOG_S(INFO) << "Using nearest ccls file "<< ccls_path <<"\n";
+                auto& folder = root2folder[cur];
+                ret.root = cur;
+                ret.directory = cur;
+                ret.args = readCompilerArgumentsFromFile(ccls_path);
+                ret.args.push_back(intern(path));
+                best_dot_ccls_folder = &folder;
+                usingLocalCCLSFile = true;
+                break;
+            }
+        }
+    }
+
+    if(!usingLocalCCLSFile) {
     if (!best) {
       // Infer args from a similar path.
       int best_score = INT_MIN;
@@ -577,6 +599,7 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect,
         ret.args.resize(best->compdb_size);
       else
         best_dot_ccls_args = nullptr;
+    }
     }
     ret.filename = path;
   }
