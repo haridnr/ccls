@@ -67,6 +67,9 @@ struct Config {
     // we can customize the name of the file if needed. Eg - .ccls-glnxa64 or .ccls-maci etc
     // for different platforms
     std::string dotCCLSFile = ".ccls";
+
+    std::string dotCCLSOverlayOrigPath = "";  
+    std::string dotCCLSOverlayReplacePath = "";
       
   } cache;
 
@@ -328,7 +331,7 @@ struct Config {
   } xref;
 };
 REFLECT_STRUCT(Config::Cache, directory, format, hierarchicalPath,
-               retainInMemory, dotCCLSFile);
+               retainInMemory, dotCCLSFile, dotCCLSOverlayOrigPath, dotCCLSOverlayReplacePath);
 REFLECT_STRUCT(Config::ServerCap::DocumentOnTypeFormattingOptions,
                firstTriggerCharacter, moreTriggerCharacter);
 REFLECT_STRUCT(Config::ServerCap::Workspace::WorkspaceFolders, supported,
