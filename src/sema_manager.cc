@@ -187,14 +187,21 @@ public:
                           const FileEntry *file,
 #endif
                           StringRef searchPath, StringRef relativePath,
-                          const clang::Module *imported,
+                          const clang::Module *suggestedModule,
+#if LLVM_VERSION_MAJOR >= 19 // llvmorg-19-init-1720-gda95d926f6fc
+                          bool moduleImported,
+#endif
                           SrcMgr::CharacteristicKind fileKind) override {
     (void)sm;
 #if LLVM_VERSION_MAJOR >= 15 // llvmorg-15-init-7692-gd79ad2f1dbc2
     const FileEntry *file = fileRef ? &fileRef->getFileEntry() : nullptr;
 #endif
     if (file && seen.insert(file).second)
+#if LLVM_VERSION_MAJOR < 19
       out.emplace_back(pathFromFileEntry(*file), file->getModificationTime());
+#else
+      out.emplace_back(pathFromFileEntry(*fileRef), file->getModificationTime());
+#endif
   }
 };
 
@@ -236,7 +243,11 @@ public:
     FileID fid = sm.getFileID(l);
     auto it = fID2concerned.try_emplace(fid.getHashValue());
     if (it.second) {
+#if LLVM_VERSION_MAJOR < 19
       const FileEntry *fe = sm.getFileEntryForID(fid);
+#else
+      OptionalFileEntryRef fe = sm.getFileEntryRefForID(fid);
+#endif
       it.first->second = fe && pathFromFileEntry(*fe) == path;
     }
     return it.first->second;

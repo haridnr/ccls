@@ -13,19 +13,31 @@
 #include <clang/Driver/Tool.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Lex/PreprocessorOptions.h>
+#if LLVM_VERSION_MAJOR >= 16 // llvmorg-16-init-15123-gf09cf34d0062
+#include <llvm/TargetParser/Host.h>
+#else
 #include <llvm/Support/Host.h>
+#endif
 #include <llvm/Support/Path.h>
 
 using namespace clang;
 
 namespace ccls {
+#if LLVM_VERSION_MAJOR < 19
 std::string pathFromFileEntry(const FileEntry &file) {
+#else
+std::string pathFromFileEntry(FileEntryRef file) {
+#endif
   std::string ret;
   if (file.getName().startswith("/../")) {
     // Resolve symlinks outside of working folders. This handles leading path
     // components, e.g. (/lib -> /usr/lib) in
     // /../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/utility
+#if LLVM_VERSION_MAJOR < 19
     ret = file.tryGetRealPathName();
+#else
+    ret = file.getFileEntry().tryGetRealPathName();
+#endif
   } else {
     // If getName() refers to a file within a workspace folder, we prefer it
     // (which may be a symlink).
@@ -325,8 +337,12 @@ const char *clangBuiltinTypeName(int kind) {
     return "queue_t";
   case BuiltinType::OCLReserveID:
     return "reserve_id_t";
+#if LLVM_VERSION_MAJOR >= 19 // llvmorg-19-init-9465-g39adc8f42329
+  case BuiltinType::ArraySection:
+#else
   case BuiltinType::OMPArraySection:
-    return "<OpenMP array section type>";
+#endif
+    return "<array section type>";
   default:
     return "";
   }
