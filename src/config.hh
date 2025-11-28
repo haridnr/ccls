@@ -62,6 +62,12 @@ struct Config {
     // 0: never retain; 1: retain after initial load; 2: retain after 2 loads
     // (initial load+first save)
     int retainInMemory = 2;
+
+    // By default use .ccls as the name of the file to collect compiler flags
+    // we can customize the name of the file if needed. Eg - .ccls-glnxa64 or .ccls-maci etc
+    // for different platforms
+    std::string dotCCLSFile = ".ccls";
+      
   } cache;
 
   struct ServerCap {
@@ -328,7 +334,7 @@ struct Config {
     int maxNum = 2000;
   } xref;
 };
-REFLECT_STRUCT(Config::Cache, directory, format, hierarchicalPath, retainInMemory);
+REFLECT_STRUCT(Config::Cache, directory, format, hierarchicalPath, retainInMemory, dotCCLSFile);
 REFLECT_STRUCT(Config::ServerCap::DocumentOnTypeFormattingOptions, firstTriggerCharacter, moreTriggerCharacter);
 REFLECT_STRUCT(Config::ServerCap::Workspace::WorkspaceFolders, supported, changeNotifications);
 REFLECT_STRUCT(Config::ServerCap::Workspace, workspaceFolders);
