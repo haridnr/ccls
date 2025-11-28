@@ -449,6 +449,12 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect, bo
         auto cur = path;
         while (!(cur = sys::path::parent_path(cur)).empty()) {
             auto ccls_path = cur + g_config->cache.dotCCLSFile;
+            if(g_config->cache.dotCCLSOverlayOrigPath != "" && g_config->cache.dotCCLSOverlayReplacePath != "") {
+                auto pos = ccls_path.find(g_config->cache.dotCCLSOverlayOrigPath);
+                if(pos != std::string::npos) {
+                    ccls_path.replace(pos, g_config->cache.dotCCLSOverlayOrigPath.length(), g_config->cache.dotCCLSOverlayReplacePath);
+                }
+            }
             if (sys::fs::exists(ccls_path)) {
                 LOG_S(INFO) << "Using nearest ccls file "<< ccls_path <<"\n";
                 auto& folder = root2folder[cur];
