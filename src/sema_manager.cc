@@ -284,6 +284,7 @@ std::unique_ptr<CompilerInstance> buildCompilerInstance(Session &session, std::u
   // RequiresNullTerminator: true may cause out-of-bounds read when a file is
   // mmap'ed but is saved concurrently.
 #if LLVM_VERSION_MAJOR >= 22
+  clang->setVirtualFileSystem(fs);
   clang->createFileManager();
 #else
   clang->createFileManager(fs);

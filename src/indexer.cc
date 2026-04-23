@@ -1282,6 +1282,7 @@ IndexResult index(WorkingFiles *wfiles, VFS *vfs, const std::string &opt_wdir, c
     return {};
   clang->getPreprocessorOpts().RetainRemappedFileBuffers = true;
 #if LLVM_VERSION_MAJOR >= 22
+  clang->setVirtualFileSystem(fs);
   clang->createFileManager();
 #else
   clang->createFileManager(fs);
