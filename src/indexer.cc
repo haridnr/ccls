@@ -15,7 +15,11 @@
 #include <clang/Frontend/MultiplexConsumer.h>
 #include <clang/Index/IndexDataConsumer.h>
 #include <clang/Index/IndexingAction.h>
+#if LLVM_VERSION_MAJOR >= 23 // llvmorg-22-init-27296-g65cb738ff419
+#include <clang/UnifiedSymbolResolution/USRGeneration.h>
+#else
 #include <clang/Index/USRGeneration.h>
+#endif
 #include <clang/Lex/PreprocessorOptions.h>
 #include <llvm/ADT/DenseSet.h>
 #include <llvm/Support/CrashRecoveryContext.h>
@@ -506,7 +510,11 @@ public:
 
   PrintingPolicy getDefaultPolicy() const {
     PrintingPolicy pp(ctx->getLangOpts());
+#if LLVM_VERSION_MAJOR >= 23 // llvmorg-22-init-25026-gf5f8435605ba
+    pp.AnonymousTagNameStyle = static_cast<unsigned>(PrintingPolicy::AnonymousTagMode::Plain);
+#else
     pp.AnonymousTagLocations = false;
+#endif
     pp.TerseOutput = true;
     pp.PolishForDeclaration = true;
     pp.ConstantsAsWritten = true;
