@@ -64,7 +64,7 @@ OUTPUT:
       "uses": ["14:3-14:9|16420|-1"]
     }],
   "usr2type": [{
-      "usr": 452,
+      "usr": 469,
       "detailed_name": "",
       "qual_name_offset": 0,
       "short_name": "",
@@ -77,8 +77,8 @@ OUTPUT:
       "parent_kind": 0,
       "declarations": [],
       "derived": [],
-      "instances": [6112882821797148411, 11489549839875479478, 9648311402855509901, 11489549839875479478,
-8039186520399841081], "uses": []
+      "instances": [6112882821797148411, 11489549839875479478, 9648311402855509901, 11489549839875479478, 8039186520399841081],
+      "uses": []
     }, {
       "usr": 15041163540773201510,
       "detailed_name": "struct Foo {}",
@@ -106,7 +106,7 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "a",
       "spell": "1:17-1:18|1:13-1:18|1026|-1",
-      "type": 452,
+      "type": 469,
       "kind": 253,
       "parent_kind": 12,
       "storage": 0,
@@ -119,7 +119,7 @@ OUTPUT:
       "short_name": "a",
       "hover": "int a = 5",
       "spell": "13:7-13:8|13:3-13:12|2|-1",
-      "type": 452,
+      "type": 469,
       "kind": 13,
       "parent_kind": 12,
       "storage": 0,
@@ -131,7 +131,7 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "field_var",
       "spell": "7:7-7:16|7:3-7:16|1026|-1",
-      "type": 452,
+      "type": 469,
       "kind": 8,
       "parent_kind": 23,
       "storage": 0,
@@ -143,7 +143,7 @@ OUTPUT:
       "qual_name_offset": 11,
       "short_name": "static_var",
       "spell": "10:10-10:20|10:1-10:24|1026|-1",
-      "type": 452,
+      "type": 469,
       "kind": 8,
       "parent_kind": 23,
       "storage": 2,

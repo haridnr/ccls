@@ -246,7 +246,7 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
   std::string version = LLVM_VERSION_STRING;
 
   // Index tests change based on the version of clang used.
-  static const char kRequiredClangVersion[] = "22.0.0git";
+  static const char kRequiredClangVersion[] = "23.0.0git";
   if (version != kRequiredClangVersion && version.find("svn") == std::string::npos) {
     fprintf(stderr,
             "Index tests must be run using clang version %s, ccls is running "
@@ -255,8 +255,12 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
     return false;
   }
 
+  // CCLS_UPDATE_EXPECT=1 regenerates snapshots non-interactively (no TTY
+  // required), useful for CI and headless runs.
   bool success = true;
-  bool update_all = false;
+  bool update_all = std::getenv("CCLS_UPDATE_EXPECT") != nullptr;
+  if (update_all)
+    enable_update = true;
   // FIXME: show diagnostics in STL/headers when running tests. At the moment
   // this can be done by conRequestIdex index(1, 1);
   getFilesInFolder("index_tests", true /*recursive*/, true /*add_folder_to_path*/, [&](const std::string &path) {
@@ -318,10 +322,10 @@ bool runIndexTests(const std::string &filter_path, bool enable_update) {
         diffDocuments(path, expected_path, expected, actual);
         puts("\n");
         if (enable_update) {
-          printf("[Enter to continue - type u to update test, a to update "
-                 "all]");
           char c = 'u';
           if (!update_all) {
+            printf("[Enter to continue - type u to update test, a to update "
+                   "all]");
             c = getchar();
             getchar();
           }

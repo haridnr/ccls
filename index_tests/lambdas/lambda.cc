@@ -24,12 +24,16 @@ OUTPUT:
       "spell": "1:6-1:9|1:1-12:2|2|-1",
       "bases": [],
       "vars": [12666114896600231317, 2981279427664991319],
-      "callees": ["9:14-9:15|17926497908620168464|3|16420", "10:14-10:15|17926497908620168464|3|16420",
-"11:14-11:15|17926497908620168464|3|16420"], "kind": 12, "parent_kind": 1, "storage": 0, "declarations": [], "derived":
-[], "uses": []
+      "callees": ["9:14-9:15|17926497908620168464|3|16420", "10:14-10:15|17926497908620168464|3|16420", "11:14-11:15|17926497908620168464|3|16420"],
+      "kind": 12,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
     }, {
       "usr": 17926497908620168464,
-      "detailed_name": "inline constexpr void foo()::(anon class)::operator()(int y) const",
+      "detailed_name": "inline constexpr void foo()::(lambda)::operator()(int y) const",
       "qual_name_offset": 22,
       "short_name": "operator()",
       "bases": [],
@@ -43,7 +47,7 @@ OUTPUT:
       "uses": ["9:14-9:15|16420|-1", "10:14-10:15|16420|-1", "11:14-11:15|16420|-1"]
     }],
   "usr2type": [{
-      "usr": 452,
+      "usr": 469,
       "detailed_name": "",
       "qual_name_offset": 0,
       "short_name": "",
@@ -94,7 +98,7 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "x",
       "spell": "2:7-2:8|2:3-2:8|2|-1",
-      "type": 452,
+      "type": 469,
       "kind": 13,
       "parent_kind": 12,
       "storage": 0,
@@ -106,7 +110,7 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "y",
       "spell": "4:31-4:32|4:27-4:32|1026|-1",
-      "type": 452,
+      "type": 469,
       "kind": 253,
       "parent_kind": 6,
       "storage": 0,

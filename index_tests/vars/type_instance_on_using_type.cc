@@ -42,7 +42,7 @@ OUTPUT:
       "parent_kind": 1,
       "declarations": [],
       "derived": [],
-      "instances": [],
+      "instances": [6975456769752895964],
       "uses": ["2:11-2:12|4|-1"]
     }, {
       "usr": 7434820806199665424,
@@ -59,7 +59,7 @@ OUTPUT:
       "parent_kind": 1,
       "declarations": [],
       "derived": [],
-      "instances": [6975456769752895964],
+      "instances": [],
       "uses": ["4:3-4:4|4|-1"]
     }],
   "usr2var": [{
@@ -68,7 +68,7 @@ OUTPUT:
       "qual_name_offset": 2,
       "short_name": "a",
       "spell": "4:5-4:6|4:3-4:6|2|-1",
-      "type": 7434820806199665424,
+      "type": 4750332761459066907,
       "kind": 13,
       "parent_kind": 12,
       "storage": 0,
