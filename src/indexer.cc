@@ -1275,6 +1275,11 @@ IndexResult index(WorkingFiles *wfiles, VFS *vfs, const std::string &opt_wdir, c
   auto clang = std::make_unique<CompilerInstance>(pch);
   clang->setInvocation(std::move(ci));
 #endif
+#if LLVM_VERSION_MAJOR >= 22
+  // Must precede createDiagnostics, which dereferences the VFS. Use
+  // createVirtualFileSystem (not setVirtualFileSystem) so -ivfsoverlay applies.
+  clang->createVirtualFileSystem(fs);
+#endif
   clang->createDiagnostics(
 #if LLVM_VERSION_MAJOR >= 20 && LLVM_VERSION_MAJOR < 22
       *fs,
@@ -1290,7 +1295,6 @@ IndexResult index(WorkingFiles *wfiles, VFS *vfs, const std::string &opt_wdir, c
     return {};
   clang->getPreprocessorOpts().RetainRemappedFileBuffers = true;
 #if LLVM_VERSION_MAJOR >= 22
-  clang->setVirtualFileSystem(fs);
   clang->createFileManager();
 #else
   clang->createFileManager(fs);
