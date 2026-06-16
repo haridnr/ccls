@@ -429,7 +429,13 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect, bo
   if (best_dot_ccls_args && !(append = appendToCDB(*best_dot_ccls_args)) && !exact_match) {
     // If the first line is not %compile_commands.json, override the compdb
     // match if it is not an exact match.
-    ret.root = ret.directory = best_dot_ccls_root;
+    // best_dot_ccls_dir comes from a folder.dot_ccls key which stores paths
+    // with a trailing '/' for prefix matching (e.g. "/path/dir/"). Strip it
+    // here because ret.directory is used as -working-directory for clang.
+    ret.root = best_dot_ccls_root;
+    ret.directory = best_dot_ccls_dir.back() == '/'
+        ? best_dot_ccls_dir.substr(0, best_dot_ccls_dir.size() - 1)
+        : best_dot_ccls_dir;
     ret.filename = path;
     if (best_dot_ccls_args->empty()) {
       ret.args = getFallback(path);
@@ -445,10 +451,12 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect, bo
 
     bool usingLocalCCLSFile = false;
     if (!best) {
-        // Find local .ccls file to get args
+        // Walk up the directory tree looking for a .ccls file. On first
+        // discovery, cache it into folder.dot_ccls so subsequent lookups
+        // hit the prefix-match loop above (lines 405-411) without filesystem I/O.
         auto cur = path;
         while (!(cur = sys::path::parent_path(cur)).empty()) {
-            auto ccls_path = cur + g_config->cache.dotCCLSFile;
+            auto ccls_path = cur + "/" + g_config->cache.dotCCLSFile;
             if(g_config->cache.dotCCLSOverlayOrigPath != "" && g_config->cache.dotCCLSOverlayReplacePath != "") {
                 auto pos = ccls_path.find(g_config->cache.dotCCLSOverlayOrigPath);
                 if(pos != std::string::npos) {
@@ -457,12 +465,21 @@ Project::Entry Project::findEntry(const std::string &path, bool can_redirect, bo
             }
             if (sys::fs::exists(ccls_path)) {
                 LOG_S(INFO) << "Using nearest ccls file "<< ccls_path <<"\n";
-                auto& folder = root2folder[cur];
+                std::string dirKey = cur + '/';
+                std::vector<const char *> args = readCompilerArgumentsFromFile(ccls_path);
+                // Cache into the parent folder's dot_ccls so subsequent calls
+                // find it via the prefix-match loop without hitting the filesystem.
+                for (auto &[root, folder] : root2folder) {
+                  if (StringRef(cur).startswith(root)) {
+                    folder.dot_ccls.emplace(dirKey, args);
+                    best_dot_ccls_folder = &folder;
+                    break;
+                  }
+                }
                 ret.root = cur;
                 ret.directory = cur;
-                ret.args = readCompilerArgumentsFromFile(ccls_path);
+                ret.args = std::move(args);
                 ret.args.push_back(intern(path));
-                best_dot_ccls_folder = &folder;
                 usingLocalCCLSFile = true;
                 break;
             }
