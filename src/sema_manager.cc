@@ -267,6 +267,11 @@ std::unique_ptr<CompilerInstance> buildCompilerInstance(Session &session, std::u
   auto clang = std::make_unique<CompilerInstance>(session.pch);
   clang->setInvocation(std::move(ci));
 #endif
+#if LLVM_VERSION_MAJOR >= 22
+  // Must precede createDiagnostics, which dereferences the VFS. Use
+  // createVirtualFileSystem (not setVirtualFileSystem) so -ivfsoverlay applies.
+  clang->createVirtualFileSystem(fs);
+#endif
   clang->createDiagnostics(
 #if LLVM_VERSION_MAJOR >= 20 && LLVM_VERSION_MAJOR < 22
       *fs,
@@ -284,7 +289,6 @@ std::unique_ptr<CompilerInstance> buildCompilerInstance(Session &session, std::u
   // RequiresNullTerminator: true may cause out-of-bounds read when a file is
   // mmap'ed but is saved concurrently.
 #if LLVM_VERSION_MAJOR >= 22
-  clang->setVirtualFileSystem(fs);
   clang->createFileManager();
 #else
   clang->createFileManager(fs);

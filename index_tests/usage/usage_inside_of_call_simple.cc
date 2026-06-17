@@ -19,9 +19,13 @@ OUTPUT:
       "spell": "5:6-5:9|5:1-7:2|2|-1",
       "bases": [],
       "vars": [],
-      "callees": ["6:3-6:9|18319417758892371313|3|16420", "6:10-6:13|11404602816585117695|3|16420",
-"6:18-6:21|11404602816585117695|3|16420"], "kind": 12, "parent_kind": 1, "storage": 0, "declarations": [], "derived":
-[], "uses": []
+      "callees": ["6:3-6:9|18319417758892371313|3|16420", "6:10-6:13|11404602816585117695|3|16420", "6:18-6:21|11404602816585117695|3|16420"],
+      "kind": 12,
+      "parent_kind": 1,
+      "storage": 0,
+      "declarations": [],
+      "derived": [],
+      "uses": []
     }, {
       "usr": 11404602816585117695,
       "detailed_name": "int gen()",
@@ -53,7 +57,7 @@ OUTPUT:
       "uses": ["6:3-6:9|16420|-1"]
     }],
   "usr2type": [{
-      "usr": 452,
+      "usr": 469,
       "detailed_name": "",
       "qual_name_offset": 0,
       "short_name": "",
@@ -75,7 +79,7 @@ OUTPUT:
       "qual_name_offset": 4,
       "short_name": "a",
       "spell": "1:17-1:18|1:13-1:18|1026|-1",
-      "type": 452,
+      "type": 469,
       "kind": 253,
       "parent_kind": 12,
       "storage": 0,

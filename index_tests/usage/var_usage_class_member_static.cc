@@ -44,7 +44,7 @@ OUTPUT:
       "uses": ["8:3-8:9|16420|-1"]
     }],
   "usr2type": [{
-      "usr": 452,
+      "usr": 469,
       "detailed_name": "",
       "qual_name_offset": 0,
       "short_name": "",
@@ -82,7 +82,7 @@ OUTPUT:
       "detailed_name": "static int Foo::x",
       "qual_name_offset": 11,
       "short_name": "x",
-      "type": 452,
+      "type": 469,
       "kind": 8,
       "parent_kind": 23,
       "storage": 2,

@@ -89,6 +89,9 @@ else()
     clangDriver
     clangBasic
   )
+  if(LLVM_VERSION_MAJOR GREATER_EQUAL 23) # llvmorg-22-init-27296-g65cb738ff419
+    target_link_libraries(ccls PRIVATE clangUnifiedSymbolResolution)
+  endif()
 endif()
 
 if(LLVM_LINK_LLVM_DYLIB)
